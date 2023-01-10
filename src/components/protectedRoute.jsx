@@ -4,7 +4,6 @@ import AuthContext from "../context/authContext";
 
 const ProtectedRoute = (props) => {
   const { user } = useContext(AuthContext);
-  console.log(user);
 
   return <>{user ? <Outlet /> : <Navigate to={"/login"} />}</>;
 };

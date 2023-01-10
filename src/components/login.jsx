@@ -1,18 +1,20 @@
-import { useState } from "react";
+import { Joi } from "joi-browser";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+
+import AuthContext from "../context/authContext";
 
 const Login = () => {
-  const users = [
-    {
-      username: "noor",
-      password: "20142014",
-    },
-  ];
-  const [isLogged, setIsLogged] = useState(false);
+  // const schema = {
+  //   username: Joi.string().min(10).max(20).required().label("Username"),
+  //   password: Joi.string().min(5).max(20).required().label("Password"),
+  // };
+  const { user, login } = useContext(AuthContext);
+  const [inputDissapled, setInputDissapled] = useState(false);
+  const [values, setValues] = useState({ username: "", password: "" });
+  // const [isLogged, setIsLogged] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [values, setValues] = useState({ username: "", password: "" });
 
   const handleInput = (e) => {
     const newValues = { ...values };
@@ -22,26 +24,16 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      const loginUser = users.find(
-        (u) => u.username === values.username && u.password === values.password
-      );
-      if (loginUser) {
-        setIsLogged(true);
-        navigate("/");
-      } else {
-        toast.error("userName or password  is in valid");
-        setLoading(false);
-      }
-    }, 2000);
+    setInputDissapled(true);
+    login(values, setLoading, setInputDissapled);
   };
+  if (user) return navigate("/");
 
   return (
     <main className="form-signin w-100 m-auto">
-      <fieldset>
+      <fieldset disabled={inputDissapled}>
         <form onSubmit={handleSubmit}>
           <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
-
           <div className="form-floating">
             <input
               type="text"
@@ -70,7 +62,9 @@ const Login = () => {
           <button
             className="w-100 btn btn-lg btn-primary"
             type="submit"
-            disabled={loading}
+            disabled={
+              loading || values.username === "" || values.password === ""
+            }
           >
             {loading && (
               <span

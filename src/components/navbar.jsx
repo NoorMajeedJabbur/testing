@@ -1,13 +1,16 @@
-import userEvent from "@testing-library/user-event";
+import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
+import AuthContext from "../context/authContext";
 
 const Navbar = () => {
   const Links = [
     { to: "/", label: "Home" },
     { to: "/users", label: "Users" },
+    { to: "/table", label: "Table" },
   ];
   const { pathname } = useLocation();
-
+  const { user, Logout } = useContext(AuthContext);
+  if (!user) return null;
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark ">
       <div className="container">
@@ -31,7 +34,7 @@ const Navbar = () => {
               <li className="nav-item" key={link.label}>
                 <Link
                   className={
-                    pathname === link.to ? "nav-link-active" : "nav-link"
+                    pathname === link.to ? "nav-link active" : "nav-link"
                   }
                   to={link.to}
                 >
@@ -41,6 +44,13 @@ const Navbar = () => {
             ))}
           </ul>
         </div>
+        <ul className="navbar-nav d-flex">
+          <li className=" nav-item">
+            <Link className="nav-link" onClick={Logout}>
+              Logout
+            </Link>
+          </li>
+        </ul>
       </div>
     </nav>
   );

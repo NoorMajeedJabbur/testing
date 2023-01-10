@@ -5,7 +5,8 @@ const Home = () => {
   //   const { user } = useContext(AuthContext);
   return (
     <>
-      <h1> Home Page</h1>;{/* <h2> user :{user}</h2>; */}
+      <h1> Home Page</h1>
+      {/* <h2> user :{user}</h2>; */}
     </>
   );
 };
